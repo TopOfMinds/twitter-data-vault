@@ -12,4 +12,6 @@ Clone this repo:
 
 Start all the services:
 
+    $ docker-machine create --driver virtualbox --virtualbox-memory 6000 confluent
+    $ eval $(docker-machine env confluent)
     $ docker-compose up
