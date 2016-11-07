@@ -10,8 +10,15 @@ Clone this repo:
     $ git clone git@github.com:TopOfMinds/twitter-data-vault.git
     $ cd twitter-data-vault
 
+Create an app on [twitter](https://apps.twitter.com/) and fill in application name & description & web site and accept the developer agreement. Then copy ```kafka-connect-standalone/include/etc/kafka-connect/conf/twitter-source.properties.example``` to ```twitter-source.properties``` in the same directory and fill in the consumer key & secret and the access token & token secret.
+
 Start all the services:
 
     $ docker-machine create --driver virtualbox --virtualbox-memory 6000 confluent
+    $ docker-machine ssh confluent
+    docker@confluent:~$ sudo -i
+    root@confluent:~# sysctl -w vm.max_map_count=262144
+    root@confluent:~# exit
+    docker@confluent:~$ exit
     $ eval $(docker-machine env confluent)
     $ docker-compose up

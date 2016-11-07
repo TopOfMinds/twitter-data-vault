@@ -39,6 +39,10 @@ services:
       KAFKA_REST_LISTENERS: http://localhost:8082
       KAFKA_REST_SCHEMA_REGISTRY_URL: http://localhost:8081
 
+  elasticsearch:
+    image: elasticsearch
+    network_mode: host
+
   kafka-connect:
     build: kafka-connect-standalone
     image: topofminds/kafka-connect-standalone:latest
@@ -58,3 +62,32 @@ services:
       CONNECT_REST_ADVERTISED_HOST_NAME: "localhost"
       CONNECT_OFFSET_STORAGE_FILE_FILENAME: /tmp/connect.offsets
       CONNECT_OFFSET_FLUSH_INTERVAL_MS: 10000
+
+  kafka-connect-elasticsearch:
+    build: kafka-connect-elasticsearch
+    image: topofminds/kafka-connect-elasticsearch:latest
+    network_mode: host
+    depends_on:
+      - zookeeper
+      - schema-registry
+      - elasticsearch
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: localhost:29092
+      CONNECT_REST_PORT: 28083
+      CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://localhost:8081
+      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://localhost:8081
+      CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_REST_ADVERTISED_HOST_NAME: "localhost"
+      CONNECT_OFFSET_STORAGE_FILE_FILENAME: /tmp/connect.offsets
+      CONNECT_OFFSET_FLUSH_INTERVAL_MS: 10000
+
+  kibana:
+    image: kibana
+    network_mode: host
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_URL=http://localhost:9200
