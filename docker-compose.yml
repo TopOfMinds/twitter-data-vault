@@ -45,8 +45,8 @@ services:
     network_mode: host
 
   kafka-connect:
-    build: kafka-connect-standalone
-    image: topofminds/kafka-connect-standalone:latest
+    build: kafka-connect
+    image: topofminds/kafka-connect:latest
     network_mode: host
     depends_on:
       - zookeeper
@@ -55,14 +55,17 @@ services:
     environment:
       CONNECT_BOOTSTRAP_SERVERS: localhost:29092
       CONNECT_REST_PORT: 28082
+      CONNECT_GROUP_ID: twitter-data-vault
+      CONNECT_CONFIG_STORAGE_TOPIC: twitter-data-vault-config
+      CONNECT_OFFSET_STORAGE_TOPIC: twitter-data-vault-offsets
+      CONNECT_STATUS_STORAGE_TOPIC: twitter-data-vault-status
       CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
       CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://localhost:8081
       CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
       CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://localhost:8081
-      CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-      CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-      CONNECT_REST_ADVERTISED_HOST_NAME: "localhost"
-      CONNECT_OFFSET_STORAGE_FILE_FILENAME: /tmp/connect.offsets
+      CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_REST_ADVERTISED_HOST_NAME: localhost
       CONNECT_OFFSET_FLUSH_INTERVAL_MS: 10000
 
   kibana:
@@ -72,3 +75,16 @@ services:
       - elasticsearch
     environment:
       - ELASTICSEARCH_URL=http://localhost:9200
+
+  twitter-data-vault-setup:
+    build: twitter-data-vault-setup
+    image: topofminds/twitter-data-vault-setup:latest
+    network_mode: host
+    depends_on:
+      - elasticsearch
+      - kafka-connect
+    environment:
+      CONNECT_HOST: localhost
+      CONNECT_REST_PORT: 28082
+      ELASTICSEARCH_HOST: localhost
+      ELASTICSEARCH_PORT: 9200

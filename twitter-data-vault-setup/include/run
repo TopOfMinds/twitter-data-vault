@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -o nounset \
+    -o errexit \
+    -o verbose \
+    -o xtrace
+
+cd /etc/topofminds/docker/
+
+while ! nc -z $ELASTICSEARCH_HOST $ELASTICSEARCH_PORT; do sleep 3; done
+
+curl -X PUT \
+  -H "Content-Type: application/json" \
+  --data @twitter-elasticsearch-mapping.json \
+  http://$ELASTICSEARCH_HOST:$ELASTICSEARCH_PORT/twitter
+
+while ! nc -z $CONNECT_HOST $CONNECT_REST_PORT; do sleep 3; done
+
+curl -X POST \
+  -H "Content-Type: application/json" \
+  --data @elasticsearch-sink.json \
+  http://$CONNECT_HOST:$CONNECT_REST_PORT/connectors
+
+curl -X POST \
+  -H "Content-Type: application/json" \
+  --data @twitter-source.json \
+  http://$CONNECT_HOST:$CONNECT_REST_PORT/connectors

@@ -1,0 +1,121 @@
+{
+  "mappings" : {
+    "kafka-connect" : {
+      "properties" : {
+        "created_at" : {
+          "type" : "date"
+        },
+        "entities" : {
+          "properties" : {
+            "hashtags" : {
+              "properties" : {
+                "text" : {
+                  "type" : "string",
+                  "index" : "not_analyzed"
+                }
+              }
+            },
+            "media" : {
+              "properties" : {
+                "display_url" : {
+                  "type" : "string",
+                  "index" : "not_analyzed"
+                },
+                "expanded_url" : {
+                  "type" : "string",
+                  "index" : "not_analyzed"
+                },
+                "id" : {
+                  "type" : "long"
+                },
+                "type" : {
+                  "type" : "string",
+                  "index" : "not_analyzed"
+                },
+                "url" : {
+                  "type" : "string",
+                  "index" : "not_analyzed"
+                }
+              }
+            },
+            "urls" : {
+              "properties" : {
+                "display_url" : {
+                  "type" : "string",
+                  "index" : "not_analyzed"
+                },
+                "expanded_url" : {
+                  "type" : "string",
+                  "index" : "not_analyzed"
+                },
+                "url" : {
+                  "type" : "string",
+                  "index" : "not_analyzed"
+                }
+              }
+            },
+            "user_mentions" : {
+              "properties" : {
+                "id" : {
+                  "type" : "long"
+                },
+                "name" : {
+                  "type" : "string",
+                  "index" : "not_analyzed"
+                },
+                "screen_name" : {
+                  "type" : "string",
+                  "index" : "not_analyzed"
+                }
+              }
+            }
+          }
+        },
+        "id" : {
+          "type" : "long"
+        },
+        "is_retweet" : {
+          "type" : "boolean"
+        },
+        "lang" : {
+          "type" : "string",
+          "index" : "not_analyzed"
+        },
+        "text" : {
+          "type" : "text"
+        },
+        "user" : {
+          "properties" : {
+            "followers_count" : {
+              "type" : "integer"
+            },
+            "friends_count" : {
+              "type" : "integer"
+            },
+            "id" : {
+              "type" : "long"
+            },
+            "location" : {
+              "type" : "string",
+              "index" : "not_analyzed"
+            },
+            "name" : {
+              "type" : "string",
+              "index" : "not_analyzed"
+            },
+            "screen_name" : {
+              "type" : "string",
+              "index" : "not_analyzed"
+            },
+            "statuses_count" : {
+              "type" : "integer"
+            },
+            "verified" : {
+              "type" : "boolean"
+            }
+          }
+        }
+      }
+    }
+  }
+}

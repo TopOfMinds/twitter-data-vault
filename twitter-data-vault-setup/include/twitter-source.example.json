@@ -1,0 +1,15 @@
+{
+  "name": "twitter-source",
+  "config": {
+    "connector.class":"com.eneco.trading.kafka.connect.twitter.TwitterSourceConnector",
+    "tasks.max":"1",
+    "topic":"twitter",
+    "twitter.consumerkey": "",
+    "twitter.consumersecret": "",
+    "twitter.token": "",
+    "twitter.secret": "",
+    "language": "en",
+    "stream.type": "filter",
+    "track.terms": "data vault,top of minds,topofminds,informatica,kafka"
+  }
+}
